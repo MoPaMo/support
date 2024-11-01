@@ -4,12 +4,17 @@ const path = require("path");
 
 const app = express();
 
-// Set security HTTP headers
-app.use(helmet());
+// Set security HTTP headers only in production
+if (process.env.NODE_ENV !== "development") {
+  app.use(helmet());
+}
 
 // Set the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+// Public
+app.use(express.static(path.join(__dirname, "public")));
 
 // Define a simple route
 app.get("/", (req, res) => {
